@@ -10,4 +10,6 @@
 
 @interface TodoViewController : UITableViewController
 
+-(IBAction)logoutClick:(UIBarButtonItem*)sender;
+
 @end

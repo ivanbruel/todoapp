@@ -150,12 +150,59 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="TodoApp" id="eUL-xP-khU">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="am3-82-M3X"/>
-                        <barButtonItem key="rightBarButtonItem" title="New" id="RLx-Nv-6OG"/>
+                        <barButtonItem key="rightBarButtonItem" title="New Task" id="RLx-Nv-6OG">
+                            <connections>
+                                <segue destination="m1t-yH-JQz" kind="push" id="xrJ-XU-tAb"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qiU-FB-Q6t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1207" y="372"/>
+        </scene>
+        <!--New Task View Controller - New Task-->
+        <scene sceneID="rpf-tZ-OjD">
+            <objects>
+                <viewController id="m1t-yH-JQz" customClass="NewTaskViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="eth-yp-AcL"/>
+                        <viewControllerLayoutGuide type="bottom" id="Nz1-kc-lim"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KIS-Uh-eua">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7NG-Ae-GvC">
+                                <rect key="frame" x="37" y="97" width="247" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Description" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CDp-tq-xaL">
+                                <rect key="frame" x="37" y="135" width="247" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="New Task" id="faD-1I-WeB">
+                        <barButtonItem key="rightBarButtonItem" title="Create" id="bog-7U-igJ">
+                            <connections>
+                                <action selector="newTaskClick:" destination="m1t-yH-JQz" id="SvQ-YV-re0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="descriptionTextField" destination="CDp-tq-xaL" id="EgO-NJ-e2o"/>
+                        <outlet property="titleTextField" destination="7NG-Ae-GvC" id="kXO-hT-Y1g"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mRm-C6-qyf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1639" y="375"/>
         </scene>
     </scenes>
     <resources>
