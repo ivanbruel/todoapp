@@ -7,8 +7,10 @@
 //
 
 #import "LoginViewController.h"
-
+#import "TodoViewController.h"
 @interface LoginViewController ()
+
+@property(nonatomic,retain) NSString* userToken;
 
 @end
 
@@ -22,7 +24,42 @@
 
 #pragma mark - IBActions
 -(void)loginClick:(UIButton *)sender{
-    // Code to login
+    NSString* email = [self.emailTextField text];
+    NSString* password = [self.passwordTextField text];
+    // Show loader
+    [SVProgressHUD showProgress:-1 status:@"Logging up..."];
 }
 
+#pragma mark - Login Handler
+-(void)loginSuccessfulWithUserToken:(NSString*)userToken{
+    // Set the token
+    self.userToken = userToken;
+    // Hide the loader
+    [SVProgressHUD dismiss];
+    // Go to the Todo View Controller
+    [self performSegueWithIdentifier:@"todoSegue" sender:self];
+}
+-(void)loginFailed{
+    self.userToken = nil;
+    // Show Error message
+    [SVProgressHUD showErrorWithStatus:@"Could not login. Please re-check your credentials."];
+}
+
+#pragma mark - Segues
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if([[segue identifier]isEqualToString:@"todoSegue"]){
+        TodoViewController* todoViewController = [segue destinationViewController];
+        todoViewController.userToken = self.userToken;
+    }
+}
+
+#pragma mark - UITextField Delegate
+// Go to next textfield upon clicking the return key (perform action if no other textfield)
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+    if(textField == self.emailTextField)
+        [self.passwordTextField becomeFirstResponder];
+    if(textField == self.passwordTextField)
+        [self loginClick:nil];
+    return YES;
+}
 @end

@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NewTaskViewController : UITableViewController
+@interface NewTaskViewController : UIViewController
 
 -(IBAction)newTaskClick:(UIBarButtonItem*)sender;
 
 @property(nonatomic, weak) IBOutlet UITextField* titleTextField;
-@property(nonatomic, weak) IBOutlet UITextField* descriptionTextField;
 
 
 @end

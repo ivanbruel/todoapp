@@ -12,4 +12,6 @@
 
 -(IBAction)logoutClick:(UIBarButtonItem*)sender;
 
+@property(nonatomic, retain) NSString* userToken;
+
 @end

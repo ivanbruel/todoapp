@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3001D0A318BA5CCB0092C46F /* TodoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001D0A218BA5CCB0092C46F /* TodoViewController.m */; };
 		3001D0A718BA5E870092C46F /* NewTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001D0A618BA5E870092C46F /* NewTaskViewController.m */; };
+		3001D0AB18BA67070092C46F /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001D0AA18BA67070092C46F /* Task.m */; };
 		300ADD0D18BA550F00316013 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD0C18BA550F00316013 /* Foundation.framework */; };
 		300ADD0F18BA550F00316013 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD0E18BA550F00316013 /* CoreGraphics.framework */; };
 		300ADD1118BA550F00316013 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD1018BA550F00316013 /* UIKit.framework */; };
@@ -66,6 +67,8 @@
 		3001D0A218BA5CCB0092C46F /* TodoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoViewController.m; sourceTree = "<group>"; };
 		3001D0A518BA5E870092C46F /* NewTaskViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewTaskViewController.h; sourceTree = "<group>"; };
 		3001D0A618BA5E870092C46F /* NewTaskViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTaskViewController.m; sourceTree = "<group>"; };
+		3001D0A918BA67070092C46F /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
+		3001D0AA18BA67070092C46F /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
 		300ADD0918BA550F00316013 /* Todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		300ADD0C18BA550F00316013 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		300ADD0E18BA550F00316013 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -174,6 +177,15 @@
 			name = "New Task";
 			sourceTree = "<group>";
 		};
+		3001D0A818BA66F60092C46F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3001D0A918BA67070092C46F /* Task.h */,
+				3001D0AA18BA67070092C46F /* Task.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		300ADD0018BA550F00316013 = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +222,7 @@
 			children = (
 				300ADD1B18BA550F00316013 /* AppDelegate.h */,
 				300ADD1C18BA550F00316013 /* AppDelegate.m */,
+				3001D0A818BA66F60092C46F /* Model */,
 				300ADD9318BA57CB00316013 /* View Controllers */,
 				300ADD2418BA551000316013 /* Images.xcassets */,
 				300ADD1318BA550F00316013 /* Supporting Files */,
@@ -494,6 +507,7 @@
 				300ADD7D18BA553C00316013 /* MKAnnotationView+WebCache.m in Sources */,
 				300ADD8418BA553C00316013 /* SDWebImageManager.m in Sources */,
 				300ADD1D18BA550F00316013 /* AppDelegate.m in Sources */,
+				3001D0AB18BA67070092C46F /* Task.m in Sources */,
 				300ADD9718BA57F700316013 /* SignupViewController.m in Sources */,
 				300ADD1918BA550F00316013 /* main.m in Sources */,
 			);
