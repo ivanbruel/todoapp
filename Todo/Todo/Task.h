@@ -13,12 +13,12 @@
 // Public model properties
 @property(nonatomic, retain) NSNumber* identifier;
 @property(nonatomic, retain) NSString* title;
+@property(nonatomic, readwrite) BOOL isDone;
 
 // Custom Initializer
--(id)initWithIdentifier:(NSNumber*)identifier withTitle:(NSString*)title withState:(NSNumber*)state;
+-(id)initWithIdentifier:(NSNumber*)identifier
+              withTitle:(NSString*)title
+              isDone:(BOOL)isDone;
 
-// Model logic
--(BOOL)isDone;
--(void)setIsDone:(BOOL)isDone;
 
 @end

@@ -160,7 +160,7 @@
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="am3-82-M3X"/>
                         <barButtonItem key="rightBarButtonItem" title="New Task" id="RLx-Nv-6OG">
                             <connections>
-                                <segue destination="m1t-yH-JQz" kind="push" id="xrJ-XU-tAb"/>
+                                <segue destination="m1t-yH-JQz" kind="push" identifier="newTaskSegue" id="xrJ-XU-tAb"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -215,6 +215,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="vri-OO-PCK"/>
+        <segue reference="qVy-fM-lqh"/>
     </inferredMetricsTieBreakers>
 </document>

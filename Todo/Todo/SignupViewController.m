@@ -26,8 +26,21 @@
 -(void)signupClick:(UIButton *)sender{
     NSString* email = [self.emailTextField text];
     NSString* password = [self.passwordTextField text];
+    
+    // Create JSON
+    NSDictionary* jsonDictionary = @{@"email": email, @"password": password};
+    
     // Show loader
     [SVProgressHUD showProgress:-1 status:@"Signing up..."];
+    
+    // POST Signup to Server
+    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/"
+                                       parameters:jsonDictionary
+                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                              [self signupSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
+                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                              [self signupFailed];
+                                          }];
 }
 
 #pragma mark - Signup Handler
@@ -40,6 +53,8 @@
     
     // Go to the Todo View Controller
     [self performSegueWithIdentifier:@"todoSegue" sender:self];
+    
+    
 }
 -(void)signupFailed{
     // Show Error message

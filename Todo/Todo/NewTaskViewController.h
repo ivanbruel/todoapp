@@ -13,6 +13,6 @@
 -(IBAction)newTaskClick:(UIBarButtonItem*)sender;
 
 @property(nonatomic, weak) IBOutlet UITextField* titleTextField;
-
+@property(nonatomic,strong) NSString* userToken;
 
 @end

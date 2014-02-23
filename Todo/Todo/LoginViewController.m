@@ -26,9 +26,23 @@
 -(void)loginClick:(UIButton *)sender{
     NSString* email = [self.emailTextField text];
     NSString* password = [self.passwordTextField text];
+    
+    // Create JSON
+    NSDictionary* jsonDictionary = @{@"email": email, @"password": password};
+    
     // Show loader
     [SVProgressHUD showProgress:-1 status:@"Logging up..."];
+    
+    // POST Login to Server
+    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/"
+                                       parameters:jsonDictionary
+                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                           [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
+                                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                           [self loginFailed];
+                                       }];
 }
+
 
 #pragma mark - Login Handler
 -(void)loginSuccessfulWithUserToken:(NSString*)userToken{

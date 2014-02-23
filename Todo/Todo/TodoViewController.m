@@ -8,6 +8,7 @@
 
 #import "TodoViewController.h"
 #import "Task.h"
+#import "NewTaskViewController.h"
 @interface TodoViewController ()
 
 @property(nonatomic,retain) NSArray* tasksArray;
@@ -36,6 +37,18 @@
 -(void)tasksFromServer{
     // Show the loader
     [SVProgressHUD showProgress:-1 status:@"Loading tasks..."];
+    
+    // Create JSON
+    NSDictionary* jsonDictionary = @{@"token": self.userToken};
+    
+    // GET Tasks from Server
+    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/"
+                                       parameters:jsonDictionary
+                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                              [self tasksSucessfulWithJSON:responseObject];
+                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                              [self tasksFailed];
+                                          }];
 }
 -(void)tasksSucessfulWithJSON:(NSDictionary*)jsonDictionary{
     // Dismiss the loader
@@ -53,7 +66,7 @@
         // Create the task from the json
         Task* task = [[Task alloc]initWithIdentifier:[taskDictionary objectForKey:@"id"]
                                            withTitle:[taskDictionary objectForKey:@"title"]
-                                           withState:[taskDictionary objectForKey:@"state"]];
+                                           isDone:[[taskDictionary objectForKey:@"is_done"]boolValue]];
         
         // Add the task to the array
         [tasksMutableArray addObject:task];
@@ -138,6 +151,14 @@
     
     // Switch task status
     [self task:task markAsDone:[task isDone]];
+}
+
+#pragma mark - Segues
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if([[segue identifier]isEqualToString:@"newTaskSegue"]){
+        NewTaskViewController* newTaskViewController = [segue destinationViewController];
+        newTaskViewController.userToken = self.userToken;
+    }
 }
 
 @end
