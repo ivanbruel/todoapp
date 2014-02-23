@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3001D0A318BA5CCB0092C46F /* TodoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001D0A218BA5CCB0092C46F /* TodoViewController.m */; };
 		300ADD0D18BA550F00316013 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD0C18BA550F00316013 /* Foundation.framework */; };
 		300ADD0F18BA550F00316013 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD0E18BA550F00316013 /* CoreGraphics.framework */; };
 		300ADD1118BA550F00316013 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD1018BA550F00316013 /* UIKit.framework */; };
@@ -60,6 +61,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3001D0A118BA5CCB0092C46F /* TodoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoViewController.h; sourceTree = "<group>"; };
+		3001D0A218BA5CCB0092C46F /* TodoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoViewController.m; sourceTree = "<group>"; };
 		300ADD0918BA550F00316013 /* Todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		300ADD0C18BA550F00316013 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		300ADD0E18BA550F00316013 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -346,6 +349,8 @@
 		300ADD9818BA589D00316013 /* Todo */ = {
 			isa = PBXGroup;
 			children = (
+				3001D0A118BA5CCB0092C46F /* TodoViewController.h */,
+				3001D0A218BA5CCB0092C46F /* TodoViewController.m */,
 			);
 			name = Todo;
 			sourceTree = "<group>";
@@ -451,6 +456,7 @@
 				300ADD5618BA552B00316013 /* AFHTTPRequestOperation.m in Sources */,
 				300ADD2318BA551000316013 /* LoginViewController.m in Sources */,
 				300ADD8918BA553C00316013 /* UIImage+WebP.m in Sources */,
+				3001D0A318BA5CCB0092C46F /* TodoViewController.m in Sources */,
 				300ADD5718BA552B00316013 /* AFHTTPRequestOperationManager.m in Sources */,
 				300ADD8618BA553C00316013 /* UIButton+WebCache.m in Sources */,
 				300ADD9118BA555100316013 /* SVProgressHUD.m in Sources */,
@@ -684,6 +690,7 @@
 				300ADD3D18BA551000316013 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		300ADD3E18BA551000316013 /* Build configuration list for PBXNativeTarget "TodoTests" */ = {
 			isa = XCConfigurationList;
@@ -692,6 +699,7 @@
 				300ADD4018BA551000316013 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
