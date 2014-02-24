@@ -12,6 +12,7 @@
 
 -(IBAction)signupClick:(UIButton *)sender;
 
+@property(nonatomic, weak) IBOutlet UITextField* nameTextField;
 @property(nonatomic, weak) IBOutlet UITextField* emailTextField;
 @property(nonatomic, weak) IBOutlet UITextField* passwordTextField;
 

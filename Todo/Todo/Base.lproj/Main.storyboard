@@ -92,7 +92,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u65-lt-Szf">
-                                <rect key="frame" x="66" y="129" width="189" height="30"/>
+                                <rect key="frame" x="66" y="133" width="189" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
@@ -116,15 +116,25 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginClick:" destination="uGP-2v-lqc" eventType="touchUpInside" id="ZUi-W5-3Oj"/>
+                                    <action selector="signupClick:" destination="dwU-s2-4E4" eventType="touchUpInside" id="PEg-wc-p40"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D6G-jh-yzk">
+                                <rect key="frame" x="66" y="91" width="189" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
+                                <connections>
+                                    <outlet property="delegate" destination="dwU-s2-4E4" id="xDP-rf-LJw"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Signup" id="LG1-JD-NCZ"/>
                     <connections>
                         <outlet property="emailTextField" destination="u65-lt-Szf" id="knv-g2-Ihj"/>
+                        <outlet property="nameTextField" destination="D6G-jh-yzk" id="DVa-ao-zlf"/>
                         <outlet property="passwordTextField" destination="f1v-VP-Ic3" id="sqg-fF-xyU"/>
                         <segue destination="XsK-sS-Tmp" kind="push" identifier="todoSegue" id="vri-OO-PCK"/>
                     </connections>
@@ -215,6 +225,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qVy-fM-lqh"/>
+        <segue reference="vri-OO-PCK"/>
     </inferredMetricsTieBreakers>
 </document>

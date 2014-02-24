@@ -27,10 +27,11 @@
     [SVProgressHUD showProgress:-1 status:@"Creating new task..."];
     
     // Create JSON
-    NSDictionary* jsonDictionary = @{@"token": self.userToken, @"title": title};
+    NSDictionary* taskDictionary = @{@"title": title};
     
+    NSDictionary* jsonDictionary = @{@"authentication_token": self.userToken, @"task":taskDictionary};
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/"
+    [[AFHTTPRequestOperationManager manager] POST:[NSString stringWithFormat:@"http://192.168.1.80:3000/v1/tasks.json?authentication_token=%@",self.userToken]
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self newTaskSuccessful];
@@ -55,7 +56,7 @@
 
 #pragma mark - UITextField Delegate
 // Perform action upon return key press
--(BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
     if(textField == self.titleTextField)
         [self newTaskClick:nil];
     return YES;

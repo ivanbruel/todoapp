@@ -21,6 +21,10 @@
 {
     [super viewDidLoad];
     self.tasksArray = [NSArray new];
+    
+    UIRefreshControl* pullToRefresh = [[UIRefreshControl alloc]init];
+    self.refreshControl = pullToRefresh;
+    [pullToRefresh addTarget:self action:@selector(tasksFromServer) forControlEvents:UIControlEventValueChanged];
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -39,10 +43,10 @@
     [SVProgressHUD showProgress:-1 status:@"Loading tasks..."];
     
     // Create JSON
-    NSDictionary* jsonDictionary = @{@"token": self.userToken};
+    NSDictionary* jsonDictionary = @{@"authentication_token": self.userToken};
     
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/"
+    [[AFHTTPRequestOperationManager manager] GET:@"http://192.168.1.80:3000/v1/tasks.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self tasksSucessfulWithJSON:responseObject];
@@ -50,23 +54,21 @@
                                               [self tasksFailed];
                                           }];
 }
--(void)tasksSucessfulWithJSON:(NSDictionary*)jsonDictionary{
+-(void)tasksSucessfulWithJSON:(NSArray*)jsonArray{
     // Dismiss the loader
     [SVProgressHUD dismiss];
+    [self.refreshControl endRefreshing];
     
     // Create a mutable array to add the tasks
     NSMutableArray* tasksMutableArray = [NSMutableArray new];
     
-    // Get the task array from the json
-    NSArray* tasks = [jsonDictionary objectForKey:@"tasks"];
-    
     // Iterate every task in the task array
-    for(NSDictionary* taskDictionary in tasks){
+    for(NSDictionary* taskDictionary in jsonArray){
         
         // Create the task from the json
         Task* task = [[Task alloc]initWithIdentifier:[taskDictionary objectForKey:@"id"]
                                            withTitle:[taskDictionary objectForKey:@"title"]
-                                           isDone:[[taskDictionary objectForKey:@"is_done"]boolValue]];
+                                           isDone:[[taskDictionary objectForKey:@"completed"]boolValue]];
         
         // Add the task to the array
         [tasksMutableArray addObject:task];
@@ -81,6 +83,7 @@
 -(void)tasksFailed{
     // Show error message
     [SVProgressHUD showErrorWithStatus:@"Could not load tasks."];
+    [self.refreshControl endRefreshing];
     
     // reset the tasks model array
     self.tasksArray = [NSArray new];
@@ -91,8 +94,22 @@
 -(void)task:(Task*)task markAsDone:(BOOL)done{
     // Show the loader
     [SVProgressHUD showProgress:-1];
+    
+    // Create JSON
+    NSDictionary* jsonDictionary = @{@"completed": [NSNumber numberWithBool:done]};
+    
+    // GET Tasks from Server
+    [[AFHTTPRequestOperationManager manager] PUT:[NSString stringWithFormat:@"http://192.168.1.80:3000/v1/tasks/%d.json?authentication_token=%@",task.identifier.intValue,self.userToken]
+                                       parameters:jsonDictionary
+                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                              [self taskMarkSuccesfulWithTask:task isDone:done];
+                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                              [self tasksFailed];
+                                          }];
 }
--(void)taskMarkSuccesful{
+-(void)taskMarkSuccesfulWithTask:(Task*)task isDone:(BOOL)done{
+    task.isDone = done;
+    [self.tableView reloadData];
     // dismiss the loader
     [SVProgressHUD dismiss];
     
@@ -156,6 +173,8 @@
 #pragma mark - Segues
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue identifier]isEqualToString:@"newTaskSegue"]){
+        
+        // Set the user token on the next screen
         NewTaskViewController* newTaskViewController = [segue destinationViewController];
         newTaskViewController.userToken = self.userToken;
     }

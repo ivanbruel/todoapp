@@ -24,20 +24,24 @@
 
 #pragma mark - IBActions
 -(void)signupClick:(UIButton *)sender{
+    NSString* name = [self.nameTextField text];
     NSString* email = [self.emailTextField text];
     NSString* password = [self.passwordTextField text];
     
     // Create JSON
-    NSDictionary* jsonDictionary = @{@"email": email, @"password": password};
+    NSDictionary* userDictionary = @{@"name":name,
+                                     @"email": email,
+                                     @"password": password};
+    NSDictionary* jsonDictionary = @{@"user":userDictionary};
     
     // Show loader
     [SVProgressHUD showProgress:-1 status:@"Signing up..."];
     
     // POST Signup to Server
-    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/"
+    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/v1/users.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                              [self signupSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
+                                              [self signupSuccessfulWithUserToken:[responseObject objectForKey:@"authentication_token"]];
                                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                               [self signupFailed];
                                           }];
@@ -64,6 +68,8 @@
 #pragma mark - Segues
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if([[segue identifier]isEqualToString:@"todoSegue"]){
+        
+        // Set the user token on the next screen
         TodoViewController* todoViewController = [segue destinationViewController];
         todoViewController.userToken = self.userToken;
     }
@@ -71,7 +77,9 @@
 
 #pragma mark - UITextField Delegate
 // Go to next textfield upon clicking the return key (perform action if no other textfield)
--(BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if(textField == self.nameTextField)
+        [self.emailTextField becomeFirstResponder];
     if(textField == self.emailTextField)
         [self.passwordTextField becomeFirstResponder];
     if(textField == self.passwordTextField)
