@@ -160,18 +160,12 @@
     // Return the cell
     return cell;
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    // Height for each row (TODO: calculate height according to text)
-    return 44;
-}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     // Task for selected cell
     Task* task = [self.tasksArray objectAtIndex:indexPath.row];
     
     // Switch task status
     [self task:task markAsDone:![task isDone]];
-    
-    [self.tableView reloadData];
 }
 
 #pragma mark - Segues
