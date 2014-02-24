@@ -38,11 +38,12 @@
     [SVProgressHUD showProgress:-1 status:@"Signing up..."];
     
     // POST Signup to Server
-    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/v1/users.json"
+    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.144:3000/v1/users.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self signupSuccessfulWithUserToken:[responseObject objectForKey:@"authentication_token"]];
                                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                              NSLog(@"%@",operation.responseObject);
                                               [self signupFailed];
                                           }];
 }

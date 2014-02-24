@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "TodoViewController.h"
+
 @interface LoginViewController ()
 
 @property(nonatomic,retain) NSString* userToken;
@@ -34,18 +35,17 @@
     NSDictionary* jsonDictionary = @{@"user":userDictionary};
     
     // Show loader
-    [SVProgressHUD showProgress:-1 status:@"Logging up..."];
+    [SVProgressHUD showProgress:-1 status:@"Logging in..."];
     
     // POST Login to Server
-    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.80:3000/v1/users/sign_in.json"
+    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.144:3000/v1/users/sign_in.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                           [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
+                                           [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"authentication_token"]];
                                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                            [self loginFailed];
                                        }];
 }
-
 
 #pragma mark - Login Handler
 -(void)loginSuccessfulWithUserToken:(NSString*)userToken{

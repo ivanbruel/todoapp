@@ -20,8 +20,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Initialize tasks array
     self.tasksArray = [NSArray new];
     
+    // Create a pull to refresh
     UIRefreshControl* pullToRefresh = [[UIRefreshControl alloc]init];
     self.refreshControl = pullToRefresh;
     [pullToRefresh addTarget:self action:@selector(tasksFromServer) forControlEvents:UIControlEventValueChanged];
@@ -46,7 +49,7 @@
     NSDictionary* jsonDictionary = @{@"authentication_token": self.userToken};
     
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] GET:@"http://192.168.1.80:3000/v1/tasks.json"
+    [[AFHTTPRequestOperationManager manager] GET:@"http://192.168.1.144:3000/v1/tasks.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self tasksSucessfulWithJSON:responseObject];
@@ -96,15 +99,17 @@
     [SVProgressHUD showProgress:-1];
     
     // Create JSON
-    NSDictionary* jsonDictionary = @{@"completed": [NSNumber numberWithBool:done]};
+    NSDictionary* taskDictionary = @{@"completed": [NSNumber numberWithBool:done]};
+    NSDictionary* jsonDictionary = @{@"authentication_token": self.userToken,
+                                     @"task":taskDictionary};
     
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] PUT:[NSString stringWithFormat:@"http://192.168.1.80:3000/v1/tasks/%d.json?authentication_token=%@",task.identifier.intValue,self.userToken]
+    [[AFHTTPRequestOperationManager manager] PUT:[NSString stringWithFormat:@"http://192.168.1.144:3000/v1/tasks/%d.json",task.identifier.intValue]
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self taskMarkSuccesfulWithTask:task isDone:done];
                                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                              [self tasksFailed];
+                                              [self taskMarkFailed];
                                           }];
 }
 -(void)taskMarkSuccesfulWithTask:(Task*)task isDone:(BOOL)done{
@@ -112,9 +117,7 @@
     [self.tableView reloadData];
     // dismiss the loader
     [SVProgressHUD dismiss];
-    
-    // TODO get input from server
-    
+        
     // Deselect cell
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     
@@ -140,7 +143,6 @@
     // If it does not exist, create a new uitableviewcell
     if(cell == nil){
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cellId"];
-        [cell.textLabel setNumberOfLines:0];
     }
     
     // Get the task from the model array
@@ -151,23 +153,25 @@
     
     // If it is done set the icon accordingly (using SDWebImage to get image from the web)
     if([task isDone])
-        [cell.imageView setImageWithURL:[NSURL URLWithString:@"http://i.imgur.com/wptzHtf.png"]];
+        [cell.imageView setImage:[UIImage imageNamed:@"check"]];
     else
-        [cell.imageView setImageWithURL:[NSURL URLWithString:@"http://i.imgur.com/TceQZs6.png"]];
+        [cell.imageView setImage:[UIImage imageNamed:@"clock"]];
     
     // Return the cell
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     // Height for each row (TODO: calculate height according to text)
-    return 140;
+    return 44;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     // Task for selected cell
     Task* task = [self.tasksArray objectAtIndex:indexPath.row];
     
     // Switch task status
-    [self task:task markAsDone:[task isDone]];
+    [self task:task markAsDone:![task isDone]];
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Segues
