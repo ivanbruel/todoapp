@@ -11,8 +11,8 @@
 @interface Task : NSObject
 
 // Public model properties
-@property(nonatomic, retain) NSNumber* identifier;
-@property(nonatomic, retain) NSString* title;
+@property(nonatomic, strong) NSNumber* identifier;
+@property(nonatomic, strong) NSString* title;
 @property(nonatomic, readwrite) BOOL isDone;
 
 // Custom Initializer

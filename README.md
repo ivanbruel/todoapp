@@ -1,5 +1,24 @@
 # iOS on Rails - Part II
 This guide assumes that you already have a **MacBook** running at least OSX (**Mountain Lion**) and have **Xcode 5** installed.
+
+## Step 0 - Introduction
+iOS is a mobile platform developed by Apple and is one of the most robust mobile platforms.
+iOS development is mostly done on Xcode (IDE) and the programming language is Objective-C.
+Objective-C is an object-oriented programming language based on C, but quite different from C++ and C#. 
+
+Methods (or messages) have quite a different structure from what you have in C.
+
+```cpp
+obj->method(color,size);
+
+``` 
+
+```objc
+[obj methodWithColor:color withSize:size];
+```
+
+
+
 ## Step 1 - Setup
 
 Clone (or download as zip) the template project from [https://github.com/ivanbruel/todoapp](https://github.com/ivanbruel/todoapp).
@@ -15,7 +34,7 @@ In the **Project Root** you can configure most of the application's settings, su
 
 ### Application Delegate
 
-The **AppDelegate** focuses on allowing the developer to control his application through **lifecycle** callbacks for when the application is launched or when it goes into foreground/background. This class is mostly used to initialize you might need **globally** throughout the application. 
+The **AppDelegate** focuses on allowing the developer to control his application through **lifecycle** callbacks for when the application is launched or when it goes into foreground/background. This class is mostly used to initialize what you might need **globally** throughout the application. 
 
 ### Model
 The **Model** is where classes should be created for containing the data which should be handle by the application. In this case the model will only contain **Task**s.
@@ -57,14 +76,14 @@ This framework is provides an easy way to display a loader on the screen, and al
 Now that we know the basic project structure let's get down to the coding. 
 
 ### Model
-This application will focus on managing **Tasks** therefor let's create a Task class on the Model folder.
+This application will focus on managing **Tasks** therefore let's create a Task class on the Model folder.
 
 A Task object will need 3 things, an **identifier**, a **title** and a status **isDone**. Let's add those 3 properties to the **Task.h** file.
 
 ```objc
 // Public model properties
-@property(nonatomic, retain) NSNumber* identifier;
-@property(nonatomic, retain) NSString* title;
+@property(nonatomic, strong) NSNumber* identifier;
+@property(nonatomic, strong) NSString* title;
 @property(nonatomic, readwrite) BOOL isDone;
 ```
 Now that we have properties, the next step is to create a custom initializer to set those variables on object creation. (on the **Task.h** file aswell)
@@ -124,7 +143,7 @@ First of all let's add a private property to the **LoginViewController.m** above
 ```objc
 @interface LoginViewController ()
 
-@property(nonatomic,retain) NSString* userToken;
+@property(nonatomic,strong) NSString* userToken;
 
 @end
 ```
@@ -234,7 +253,7 @@ On the **TodoViewController.m** we want to have a private property to keep the M
 ```objc
 @interface TodoViewController ()
 
-@property(nonatomic,retain) NSArray* tasksArray;
+@property(nonatomic,strong) NSArray* tasksArray;
 
 @end
 ```

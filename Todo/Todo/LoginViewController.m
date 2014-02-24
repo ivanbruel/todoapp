@@ -11,7 +11,7 @@
 
 @interface LoginViewController ()
 
-@property(nonatomic,retain) NSString* userToken;
+@property(nonatomic,strong) NSString* userToken;
 
 @end
 

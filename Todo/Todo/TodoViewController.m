@@ -11,7 +11,7 @@
 #import "NewTaskViewController.h"
 @interface TodoViewController ()
 
-@property(nonatomic,retain) NSArray* tasksArray;
+@property(nonatomic,strong) NSArray* tasksArray;
 
 @end
 

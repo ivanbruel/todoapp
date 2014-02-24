@@ -10,7 +10,7 @@
 #import "TodoViewController.h"
 @interface SignupViewController ()
 
-@property(nonatomic,retain) NSString* userToken;
+@property(nonatomic,strong) NSString* userToken;
 
 @end
 
