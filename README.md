@@ -206,9 +206,9 @@ NSDictionary* jsonDictionary = @{@"user":userDictionary};
 
 We have now reached a stage where we actually need to communicate with the server. So let's make an interlude.
 
-## Interlude - External Frameworks
+### Interlude - External Frameworks
 
-### Cocoapods
+#### Cocoapods
 
 >To install cocoapods run **sudo gem install cocoapods** (might take a while).
 
@@ -241,7 +241,7 @@ This framework is the holy grail of image downloading. It allows with close to n
 #### SVProgressHUD
 This framework is provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface aswell.
 
-## End of Interlude
+### End of Interlude
 
 The easiest way to communicate with any web-server at the moment is by taking advantage of the **AFNetworking** library (see AFNetworking on the external libraries chapter).
 
@@ -291,60 +291,11 @@ We now have to define the methods used above for handling success and failed res
 }
 ```
 
+In case of a failed login we reset the **userToken** and show an error message to the user using the **SVProgressHUD**.
+
 As the code commentary suggest, in case of success, we're saving the user token onto the **LoginViewController** itself, dismissing the **SVProgressHUD** loader and performing a **segue** to go to the **TodoViewController**.
 
-In order to save the **userToken** we'll need to
-
-
-
-
-
-
-
-
-
-# OLD VERSION
-
-Clone (or download as zip) the template project from [https://github.com/ivanbruel/todoapp](https://github.com/ivanbruel/todoapp).
-
-Open up **Todo.xcodeproj** with **Xcode**.
-
-
-## Step 3 - Coding
-Now that we know the basic project structure let's get down to the coding. 
-
-
-### Views
-
-Now on to the View customization for the app.
-Go to your **Storyboard**, and look at your **LoginViewController** blank view.
-
-What you want to do here is drag **Text Fields** (one for the **email** and one for the **password**) from the bottom right corner of your screen and drop them in your **LoginViewController**'s view. 
-
-You will also want to drag and drop a **button** for the actual **login**. 
-
-Since we also need a **signup** button, lets drag a **Bar Button** from the right corner to right side of the **navigation bar** present on the **LoginViewController**.
-
-Now that we have the **UI** in place. Let's go to the **LoginViewController.h** and create the **IBActions** and the **IBOutlets** for the controller to interact with the views.
-
->Now go and ask me what IBOutlets and IBActions are :) 
-
-```objc
--(IBAction)loginClick:(UIButton *)sender;
-
-@property(nonatomic, weak) IBOutlet UITextField* emailTextField;
-@property(nonatomic, weak) IBOutlet UITextField* passwordTextField;
-```
-
-Going back to the **Storyboard** we can now right click each individual view and set their **IBOutlets** to the proper variables. 
-We will also want to set the **Action Segue** of the **Sign up** button to the **Signup View Controller**.
-For the **Login button** we will want to set its **Touch up event** to the **loginClick:** IBAction.
-
-
-### Login View Controller
-Let's get down to business, the next few lines of code will show you how to get input from your views, created a JSON object and perform a request to the **ruby on rails** server.
-
-First of all let's add a private property to the **LoginViewController.m** above the **@implementation LoginViewController**.
+In order to save the **userToken** we'll need to create a new **Private** property to the **LoginViewController.m** above the **@implementation LoginViewController**.
 
 ```objc
 @interface LoginViewController ()
@@ -354,76 +305,13 @@ First of all let's add a private property to the **LoginViewController.m** above
 @end
 ```
 
-On the **LoginViewController.m** you should add the following lines to your **loginClick:** method:
+///////////A PRIVATE PROPERTY DEF
 
-```objc
- NSString* email = [self.emailTextField text];
- NSString* password = [self.passwordTextField text];
-```
-This will get the email and password strings from the textfields.
+As for what a **Segue** is, it is a way to interact between different **UIViewControllers**, by reusing certain flow between them. A segue has an **identifier** to be able to perform it by code. 
 
-```objc
-NSDictionary* userDictionary = @{@"email": email,
-                                 @"password": password};
-NSDictionary* jsonDictionary = @{@"user":userDictionary};
-```
+Since we need to pass the obtained user token to the new TodoViewController, we'll also need to intercept the **Segue** call to set the variable on the next screen (avoiding the use of a global variable throughout the app).
 
-This two lines will create a JSON like:
-
-```objc
-{
-	"user":{	
-		"email": email,
-		"password": password
-	}
-}
-```
-
-Then we will show a loader using the **SVProgressHUD** framework.
-
-```
-[SVProgressHUD showProgress:-1 status:@"Logging in..."];
-```
-
-And finally we will perform a request to the server:
-
-```objc
-[[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.144:3000/v1/users/sign_in.json"
-                                       parameters:jsonDictionary
-                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                           [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
-                                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                           [self loginFailed];
-                                       }];
-```
-This will pass the **jsonDictionary** as parameter of the **POST** to the server. It will also perform the **loginSuccessfulWithUserToken:** method with the **token** from the response JSON sent by the server. It might also call **loginFailed** in case the server did not accept our input for email/password.
-
-Now let's define what happens when we receive a successful login or a failed login:
-
-```objc
--(void)loginSuccessfulWithUserToken:(NSString*)userToken{
-    // Set the token
-    self.userToken = userToken;
-    
-    // Hide the loader
-    [SVProgressHUD dismiss];
-    
-    // Go to the Todo View Controller
-    [self performSegueWithIdentifier:@"todoSegue" sender:self];
-}
--(void)loginFailed{
-    self.userToken = nil;
-    
-    // Show Error message
-    [SVProgressHUD showErrorWithStatus:@"Could not login. Please re-check your credentials."];
-}
-```
-
-In case of success we save the **userToken** to user on further API requests, dismiss the **SVProgressHUD** and we trigger a **segue** to change to the **TodoViewController**.
-
-In case of a failed login we reset the **userToken** and show an error message to the user using the **SVProgressHUD**.
-
-To pass the **userToken** to other screens we want to intercept the **segue** and set the token on the next view controller.
+>\#import "TodoViewController"
 
 ```objc
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
@@ -436,7 +324,7 @@ To pass the **userToken** to other screens we want to intercept the **segue** an
 }
 ```
 
-Last but not least, to minimally improve the user experience we want to be able to go through the textfields as if we are filling a form, as in, going to the next field when we press the return key.
+Finally, to add a touch of proper User Experience I will also set the chain of **firstResponders** for the textfields, so that you jump between the textfields as if it was a form. (and also performing the form action when there is no next field).
 
 ```objc
 // Go to next textfield upon clicking the return key (perform action if no other textfield)
@@ -448,11 +336,13 @@ Last but not least, to minimally improve the user experience we want to be able 
     return YES;
 }
 ```
+The **LoginViewController** is now complete, let's go on.
 
-### Signup View Controller
+## Step 5 - Signup View Controller
+
 The process on the **SignupViewController** is very similar to the **LoginViewController**, so I will skip that particular view controller and focus on the **TodoViewController**
 
-### TodoViewController
+## Step 6 -Todo View Controller
 
 On the **TodoViewController.m** we want to have a private property to keep the Model (Tasks) array. So let's add the next few lines of code above **@implementation TodoViewController**
 
@@ -463,6 +353,9 @@ On the **TodoViewController.m** we want to have a private property to keep the M
 
 @end
 ```
+
+This is the way you can add **private properties** to your classes in Objective-c. As you can see, this is an interface that is declared in your implementation file with a similar syntax, making it your private interface.
+
 
 Next, since the **TodoViewController** is a **UITableViewController** and the data comes from the network, we want to add a **UIRefreshControl** to have a pull to refresh functionality. We also want to initialize the property declared above to avoid **nil** pointers. Let's add the folllowing code to the **viewDidLoad:** method.
 
@@ -476,7 +369,7 @@ Next, since the **TodoViewController** is a **UITableViewController** and the da
     [pullToRefresh addTarget:self action:@selector(tasksFromServer) forControlEvents:UIControlEventValueChanged];
 ```
 
-Since we want to be able to add tasks later on, let's also refresh the data everytime we the **TodoViewController** is shown, by adding the following code to the **viewWillAppear:** method
+Since we want to be able to add tasks later on, let's also refresh the data everytime the **TodoViewController** is shown, by adding the following code to the **viewWillAppear:** method
 
 ```
 	// Load the tasks from the server every time the controller is shown
@@ -489,6 +382,9 @@ On the storyboard we have a **Logout** button for the user to logout of the appl
 // Go to the login screen upon logout
     [self.navigationController popToRootViewControllerAnimated:YES];
 ```
+
+The **UINavigationController** allow a 'push-pop' navigation style in your app, keeping the user allways in context: If you pushed a view controller, the user will see a back arrow and automatically know that he will be able to pop that view controller, getting back to the previous state.
+iOS allows multiple types of navigation and since iOS7 you can also do any type of navigation have your custom transitions. 
 
 Now that the **TodoViewController** basic setup is done, we'll need the data from the **server**. We'll create a method named **tasksFromServer** where we'll perform a network request using **AFNetworking**.
 
@@ -503,18 +399,18 @@ Now that the **TodoViewController** basic setup is done, we'll need the data fro
     [[AFHTTPRequestOperationManager manager] GET:@"http://192.168.1.144:3000/v1/tasks.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                              [self tasksSucessfulWithJSON:responseObject];
+                                              [self tasksSuccessfulWithJSON:responseObject];
                                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                               [self tasksFailed];
                                           }];
 ```
 
-This will then show a loader, create a **JSON** and send said JSON to the endpoint **/v1/tasks.json**. Performing the **tasksSucessfulWithJSON:** in case of success or **tasksFailed** in case something went wrong.
+This will then show a loader, create a **JSON** and send that JSON to the endpoint **/v1/tasks.json**. Performing the **tasksSuccessfulWithJSON:** in case of success or **tasksFailed** in case something went wrong.
 
 To implement the behavior for the server's response we need to:
 
 ```objc
--(void)tasksSucessfulWithJSON:(NSArray*)jsonArray{
+-(void)tasksSuccessfulWithJSON:(NSArray*)jsonArray{
     // Dismiss the loader
     [SVProgressHUD dismiss];
     [self.refreshControl endRefreshing];
@@ -553,7 +449,7 @@ To implement the behavior for the server's response we need to:
 }
 ```
 
-So now we have the the **Task** data stored on the **self.tasksArray** object. Let's present such data in our **UITableView**.
+So now we have the **Task** data stored on the **self.tasksArray** object. Let's present such data in our **UITableView**.
 
 ```objc
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -585,10 +481,18 @@ So now we have the the **Task** data stored on the **self.tasksArray** object. L
     return cell;
 }
 ```
+These methods have specific names and these names are conventions given by the **UITableViewDelegate** and by the **UITableViewDataSource**. Each of these methods will be called in the table view 'lifecycle' expecting you to handle the logic that responds to actions on the table view (delegate) and that populate that table view (datasource).
+This relies on the **protocol** feature of Objective-C.
+In this case, since we are inheriting from **UITableViewController**, both protocols came already implemented by the superclass, but if we wanted to implement these protocols in a **UIViewController** the syntax would look a lot like C++ templates:
 
-The **numberOfRowsInSection:** need to return the number of elements to be shown on the **UITableView**, it may be sectioned but this is not the case as we only need 1 actual section.
+```objc
+@interface LoginViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+```
 
-For the **cellForRowAtIndexPath:** we must return a **UITableViewCell** representing the data we want, in this case a **Task** object. To avoid performance issues all cells should be reused as much as possible, therefor we only create a cell in case we cannot get any reusable cells from the **UITableView**. We then assign the title to the cell's text label and set the cell's imageview to an image representing the task's state. 
+The **numberOfRowsInSection:** needs to return the number of elements to be shown on the **UITableView**, it may be sectioned but this is not the case as we only need 1 actual section.
+
+For the **cellForRowAtIndexPath:** we must return a **UITableViewCell** representing the data we want, in this case a **Task** object. To avoid performance issues all cells should be reused as much as possible, therefore we only create a cell in case we cannot get any reusable cells from the **UITableView**. We then assign the title to the cell's text label and set the cell's imageview to an image representing the task's state.
+As you could see, **indexPath** is a structure/class that gives us the actual row, but you could also find the section **indexPath.section**.
 
 To add a little bit more complexity to the application we need to be able to switch between task state, so lets add that logic to the **didSelectRowAtIndexPath:** method of the **UITableViewController**.
 
@@ -625,12 +529,13 @@ This will run the **task:markAsDone:** method for the selected task. Let's imple
 }
 ```
 
-This method will create a **JSON** and send it to the endpoint with a PUT method, where it will update the status of the task on the server side. In case of success it will run the **taskMarkSucessfulWithTask:** method, otherwise it will fall back to the **taskMarkFailed** method.
+This method will, again, create a **JSON** and send it to the endpoint with a PUT method, where it will update the status of the task on the server side. In case of success it will run the **taskMarkSucessfulWithTask:** method, otherwise it will fall back to the **taskMarkFailed** method.
+
+These two methods are implemented this way: 
 
 ```objc
 -(void)taskMarkSuccesfulWithTask:(Task*)task isDone:(BOOL)done{
     task.isDone = done;
-    [self.tableView reloadData];
     // dismiss the loader
     [SVProgressHUD dismiss];
         
@@ -649,4 +554,42 @@ This method will create a **JSON** and send it to the endpoint with a PUT method
 }
 ```
 
-With this you can d
+In the first method, `-(void)taskMarkSuccesfulWithTask:(Task*)task isDone:(BOOL)done` we mark the task as done, which can be false.
+We dismiss the **SVProgressHUD** again and deselect the selected cell, as it is not needed anymore, and then call **reloadData**, which will force the table view to check for updates in its data (and it will probably call all the **dataSource** methods implemented above.)
+
+In the second method, we simply dismiss the **SVProgressHUD** and deselect the row, cause in failure, the app model won't change its state.
+
+## Step 7 - New Task View Controller
+
+The process on the **NewTaskViewController** is very similar to the **LoginViewController** and the **SignupViewController, so I will skip that particular view controller as well.
+
+## Prologue
+
+Hopefully if this workshop went according to plan you've learned a bit of everything in regards to Objective-C, iOS, MVC, Storyboards, View Controllers, External Frameworks and etc.
+
+If you want to learn a bit more about Objective-C and iOS development I suggest you look into:
+
+- Begginers:
+	- [Developing iOS 7 Apps for iPhone and iPad by Stanford @ iTunes University](https://itunes.apple.com/us/course/developing-ios-7-apps-for/id733644550)
+	- [Ray Wenderlich - Tutorials for Developers & Gamers](http://www.raywenderlich.com/)
+- Experienced:
+	- [NSHipster](http://nshipster.com/)
+- Plug-and-Play free-to-use views:
+	- [CocoaControls](http://cocoacontrols.com)
+- Good-to-Perfect UI/UX examples
+	- [Pttrns](http://pttrns.com)
+
+Hot tecnologies to work with:
+
+- CoreData
+- AFNetworking
+- UIView animations
+- CALayers
+- UIGestureRecognizers
+- SDWebImage
+
+Feel free to contact me in case you need help, advice or guidance, my contacts are:
+
+- Email: ibruel@faber-ventures.com
+- Twitter: @ivanbruel
+- Github: /ivanbruel
