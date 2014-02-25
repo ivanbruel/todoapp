@@ -494,18 +494,17 @@ In this case, since we are inheriting from **UITableViewController**, both proto
 @interface LoginViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 ```
 
+The **numberOfRowsInSection:** needs to return the number of elements to be shown on the **UITableView**, it may be sectioned but this is not the case as we only need 1 actual section.
+
+For the **cellForRowAtIndexPath:** we must return a **UITableViewCell** representing the data we want, in this case a **Task** object. To avoid performance issues all cells should be reused as much as possible, therefore we only create a cell in case we cannot get any reusable cells from the **UITableView**. We then assign the title to the cell's text label and set the cell's imageview to an image representing the task's state.
+As you could see, **indexPath** is a structure/class that gives us the actual row, but you could also find the section **indexPath.section**.
+
 Since we're using the two images **check** and **clock** we need to add them to the application. Go to the [GitHub](http://github.com/ivanbruel/todoapp) and download the four **.png** files and drag them to your Image.xcassets, they will add 2 images containing a normal and a @2x version.
 
 These images may be used by calling the **[UIImage imageNamed:]** method by passing the image name as a string.
 The UIImage class is an object representation of an actual image file/data.
 
 A **UITableViewCell** by default contains a **UILabel** (object representation of a label) named **textLabel** and a **UIImageView** named **imageView**, these properties may be accessed by calling **cell.imageView** or **cell.textLabel**.
-
-
-The **numberOfRowsInSection:** needs to return the number of elements to be shown on the **UITableView**, it may be sectioned but this is not the case as we only need 1 actual section.
-
-For the **cellForRowAtIndexPath:** we must return a **UITableViewCell** representing the data we want, in this case a **Task** object. To avoid performance issues all cells should be reused as much as possible, therefore we only create a cell in case we cannot get any reusable cells from the **UITableView**. We then assign the title to the cell's text label and set the cell's imageview to an image representing the task's state.
-As you could see, **indexPath** is a structure/class that gives us the actual row, but you could also find the section **indexPath.section**.
 
 To add a little bit more complexity to the application we need to be able to switch between task state, so lets add that logic to the **didSelectRowAtIndexPath:** method of the **UITableViewController**.
 
@@ -578,7 +577,7 @@ The process on the **NewTaskViewController** is very similar to the **LoginViewC
 
 ## Prologue
 
-Hopefully if this workshop went according to plan you've learned a bit of everything in regards to Objective-C, iOS, MVC, Storyboards, View Controllers, External Frameworks and etc.
+Hopefully if this workshop went according to plan you've learned a bit of everything in regards to Objective-C, iOS, MVC, Storyboards, View Controllers, External Frameworks, etc.
 
 If you want to learn a bit more about Objective-C and iOS development I suggest you look into:
 
@@ -605,5 +604,5 @@ Hot tecnologies to work with:
 Feel free to contact me in case you need help, advice or guidance, my contacts are:
 
 - Email: ibruel@faber-ventures.com
-- Twitter: @ivanbruel
-- Github: /ivanbruel
+- Twitter: [@ivanbruel](https://twitter.com/ivanbruel)
+- Github: [/ivanbruel](https://github.com/ivanbruel/todoapp)
