@@ -38,7 +38,7 @@
     [SVProgressHUD showProgress:-1 status:@"Logging in..."];
     
     // POST Login to Server
-    [[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.144:3000/v1/users/sign_in.json"
+    [[AFHTTPRequestOperationManager manager] POST:@"http://ios-todo.herokuapp.com/v1/users/sign_in.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                            [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"authentication_token"]];

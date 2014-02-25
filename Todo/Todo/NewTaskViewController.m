@@ -31,7 +31,7 @@
     
     NSDictionary* jsonDictionary = @{@"authentication_token": self.userToken, @"task":taskDictionary};
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] POST:[NSString stringWithFormat:@"http://192.168.1.144:3000/v1/tasks.json?authentication_token=%@",self.userToken]
+    [[AFHTTPRequestOperationManager manager] POST:[NSString stringWithFormat:@"http://ios-todo.herokuapp.com/v1/tasks.json?authentication_token=%@",self.userToken]
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self newTaskSuccessful];

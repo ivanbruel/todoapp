@@ -79,17 +79,6 @@ The controller might also have access to the **Model**, in order to display info
 ### Assets
 In the **.xcassets** file you will have your image resources for the application's UI. These images **must** always include two versions, a normal and a retina one. (e.g. image.png and image@2x.png).
 
-### External Frameworks
-These three **External Frameworks** are probably the most used in the iOS Developer community.
-#### AFNetworking
-This framework allows very easy intergration with any **RESTful** service API, whislt having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
-
-#### SDWebImage
-This framework is the holy grail of image downloading. It allows with close to no effort the downloading and displaying of images in **UIImageView**s. Automatically managing cache and memory consumption, allowing easy to use animation upon image visualization, etc. (Might not have enough time to go through SDWebImage on this workshop).
-
-#### SVProgressHUD
-This framework is provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface aswell.
-
 
 ## Step 2 - Model
 
@@ -173,13 +162,145 @@ Let's create the **IBOutlets** for this controller (**LoginViewController.h**):
 @property(nonatomic, weak) IBOutlet UITextField* passwordTextField;
 ```
 
-**emailTextField** and **passwordTextField** after being connected to the **Storyboard ViewController** are object representations of the views themselves. 
+**emailTextField** and **passwordTextField** after being connected to the **Storyboard ViewController** are object representations of the views themselves.
 
 Since we'll have a **login click event**, we will need a **IBAction** to run code upon button press.
 
 ```objc
 -(IBAction)loginClick:(UIButton *)sender;
 ```
+
+You now want to go over to the **Storyboard** and link the textfields and the loginClick: event.
+
+On to the **LoginViewController.m**. The main interaction in this controller will be the actual login, so let's implement the **loginClick:** method.
+
+To login we'll need to get the email and password strings from the input textfields.
+
+```objc
+ NSString* email = [self.emailTextField text];
+ NSString* password = [self.passwordTextField text];
+```
+
+Since our server communicates with a **JSON** protocol (JSON is a lightweight format to transmit data from a server to an application - web, mobile,etc).
+
+Yesterday we developed a server in **Ruby on Rails** where a few **APIs** were defined. One of those was a login API, where it receives a JSON object such as:
+
+```json
+{
+	"user":{	
+		"email": "email@exemplo.com",
+		"password": "password"
+	}
+}
+```
+
+And returns user information and token in case of success, or a error message in case the login was unsucessful.
+
+In Objective-C, the closest representation of a JSON is a chain of both **NSDictionary** and **NSArray** with **NSString** and **NSNumber** as values. 
+
+```objc
+NSDictionary* userDictionary = @{@"email": email,
+                                 @"password": password};
+NSDictionary* jsonDictionary = @{@"user":userDictionary};
+```
+
+We have now reached a stage where we actually need to communicate with the server. So let's make an interlude.
+
+## Interlude - External Frameworks
+
+### Cocoapods
+
+>To install cocoapods run **sudo gem install cocoapods** (might take a while).
+
+If you have **cocoapods** installed on your **Mac** you can easily import any kind of framework.
+Open up your **Terminal.app**, go to the project's folder and run **vi Podfile**.
+
+Let's add a few popular frameworks to try it out:
+
+```
+platform :ios, '7.0'
+pod "AFNetworking"
+pod "SDWebImage"
+pod "SVProgressHUD"
+```
+
+Press **Ctrl-c** and write **:wq** to Write-Quit the file. 
+
+Next step is to actually download and install the libraries onto our project, so lets run **pod install** (this might take a few minutes depending on the network).
+
+After it is finished you should close your **Xcode** window (Cmd-W), and open the new **Workspace** by running **open Todo.xcworkspace** on the console.
+
+You will now have access to the downloaded libraries by using the **#import** macro in your code (e.g. #import <AFNetworking/AFNetworking.h>).
+
+#### AFNetworking
+This framework allows very easy intergration with any **RESTful** service API, whislt having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
+
+#### SDWebImage
+This framework is the holy grail of image downloading. It allows with close to no effort the downloading and displaying of images in **UIImageView**s. Automatically managing cache and memory consumption, allowing easy to use animation upon image visualization, etc. (Might not have enough time to go through SDWebImage on this workshop).
+
+#### SVProgressHUD
+This framework is provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface aswell.
+
+## End of Interlude
+
+The easiest way to communicate with any web-server at the moment is by taking advantage of the **AFNetworking** library (see AFNetworking on the external libraries chapter).
+
+AFNetworking Framework automatically translates this structure into a JSON string to send to the server. 
+
+So lets perform a request to the actual server.
+
+```objc
+[[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.144:3000/v1/users/sign_in.json"
+                                  parameters:jsonDictionary
+                                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                       	 [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
+                                     }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                           [self loginFailed];
+                                       }];
+```
+
+This will pass the **jsonDictionary** as parameter of the **POST** to the server. It will also perform the **loginSuccessfulWithUserToken:** method with the **token** from the response JSON sent by the server. It might also call **loginFailed** in case the server did not accept our input for email/password.
+
+>The ^(AFHTTPRequestOperation *operation, id responseObject) { code } nomenculature represent **Blocks** which are basically functions that can be passed as arguments to other functions (methods).
+
+To provide a better experience to the user, we should also send notice that we're performing a background task between the app and the server. Let's take advantage of **SVProgressHUD** to display a simple loader with a message.
+
+```objc
+[SVProgressHUD showProgress:-1 status:@"Logging in..."];
+```
+Easy peazy.
+
+We now have to define the methods used above for handling success and failed responses from the server.
+
+```objc
+-(void)loginSuccessfulWithUserToken:(NSString*)userToken{
+    // Set the token
+    self.userToken = userToken;
+    
+    // Hide the loader
+    [SVProgressHUD dismiss];
+    
+    // Go to the Todo View Controller
+    [self performSegueWithIdentifier:@"todoSegue" sender:self];
+}
+-(void)loginFailed{
+    self.userToken = nil;
+    
+    // Show Error message
+    [SVProgressHUD showErrorWithStatus:@"Could not login. Please re-check your credentials."];
+}
+```
+
+As the code commentary suggest, in case of success, we're saving the user token onto the **LoginViewController** itself, dismissing the **SVProgressHUD** loader and performing a **segue** to go to the **TodoViewController**.
+
+In order to save the **userToken** we'll need to
+
+
+
+
+
+
+
 
 
 # OLD VERSION

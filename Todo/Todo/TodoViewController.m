@@ -49,15 +49,15 @@
     NSDictionary* jsonDictionary = @{@"authentication_token": self.userToken};
     
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] GET:@"http://192.168.1.144:3000/v1/tasks.json"
+    [[AFHTTPRequestOperationManager manager] GET:@"http://ios-todo.herokuapp.com/v1/tasks.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                              [self tasksSucessfulWithJSON:responseObject];
+                                              [self tasksSuccessfulWithJSON:responseObject];
                                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                               [self tasksFailed];
                                           }];
 }
--(void)tasksSucessfulWithJSON:(NSArray*)jsonArray{
+-(void)tasksSuccessfulWithJSON:(NSArray*)jsonArray{
     // Dismiss the loader
     [SVProgressHUD dismiss];
     [self.refreshControl endRefreshing];
@@ -104,15 +104,15 @@
                                      @"task":taskDictionary};
     
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] PUT:[NSString stringWithFormat:@"http://192.168.1.144:3000/v1/tasks/%d.json",task.identifier.intValue]
+    [[AFHTTPRequestOperationManager manager] PUT:[NSString stringWithFormat:@"http://ios-todo.herokuapp.com/v1/tasks/%d.json",task.identifier.intValue]
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                              [self taskMarkSuccesfulWithTask:task isDone:done];
+                                              [self taskMarkSuccessfulWithTask:task isDone:done];
                                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                               [self taskMarkFailed];
                                           }];
 }
--(void)taskMarkSuccesfulWithTask:(Task*)task isDone:(BOOL)done{
+-(void)taskMarkSuccessfulWithTask:(Task*)task isDone:(BOOL)done{
     task.isDone = done;
     [self.tableView reloadData];
     // dismiss the loader
