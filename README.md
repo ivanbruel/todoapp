@@ -181,9 +181,9 @@ To login we'll need to get the email and password strings from the input textfie
  NSString* password = [self.passwordTextField text];
 ```
 
-Since our server communicates with a **JSON** protocol (JSON is a lightweight format to transmit data from a server to an application - web, mobile,etc).
+Since our server communicates with a **JSON** protocol (JSON is a lightweight format to transmit data from a server to an application - web, mobile,etc), we will want to send the user information (and any other information) in a previously defined JSON hierarchy.
 
-Yesterday we developed a server in **Ruby on Rails** where a few **APIs** were defined. One of those was a login API, where it receives a JSON object such as:
+Yesterday we developed a server in **Ruby on Rails** where an **API** was defined. One of those was a login API, where it receives a JSON object such as:
 
 ```json
 {
@@ -256,7 +256,7 @@ AFNetworking Framework automatically translates this structure into a JSON strin
 So lets perform a request to the actual server.
 
 ```objc
-[[AFHTTPRequestOperationManager manager] POST:@"http://192.168.1.144:3000/v1/users/sign_in.json"
+[[AFHTTPRequestOperationManager manager] POST:@"http://ios-todo.herokuapp.com/v1/users/sign_in.json"
                                   parameters:jsonDictionary
                                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                        	 [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
@@ -348,7 +348,7 @@ The **LoginViewController** is now complete, let's go on.
 
 The process on the **SignupViewController** is very similar to the **LoginViewController**, so I will skip that particular view controller and focus on the **TodoViewController**
 
-## Step 6 -Todo View Controller
+## Step 6 - Todo View Controller
 
 On the **TodoViewController.m** we want to have a private property to keep the Model (Tasks) array. So let's add the next few lines of code above **@implementation TodoViewController**
 
@@ -401,7 +401,7 @@ Now that the **TodoViewController** basic setup is done, we'll need the data fro
     NSDictionary* jsonDictionary = @{@"authentication_token": self.userToken};
     
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] GET:@"http://192.168.1.144:3000/v1/tasks.json"
+    [[AFHTTPRequestOperationManager manager] GET:@"http://ios-todo.herokuapp.com/v1/tasks.json"
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self tasksSuccessfulWithJSON:responseObject];
@@ -494,6 +494,14 @@ In this case, since we are inheriting from **UITableViewController**, both proto
 @interface LoginViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 ```
 
+Since we're using the two images **check** and **clock** we need to add them to the application. Go to the [GitHub](http://github.com/ivanbruel/todoapp) and download the four **.png** files and drag them to your Image.xcassets, they will add 2 images containing a normal and a @2x version.
+
+These images may be used by calling the **[UIImage imageNamed:]** method by passing the image name as a string.
+The UIImage class is an object representation of an actual image file/data.
+
+A **UITableViewCell** by default contains a **UILabel** (object representation of a label) named **textLabel** and a **UIImageView** named **imageView**, these properties may be accessed by calling **cell.imageView** or **cell.textLabel**.
+
+
 The **numberOfRowsInSection:** needs to return the number of elements to be shown on the **UITableView**, it may be sectioned but this is not the case as we only need 1 actual section.
 
 For the **cellForRowAtIndexPath:** we must return a **UITableViewCell** representing the data we want, in this case a **Task** object. To avoid performance issues all cells should be reused as much as possible, therefore we only create a cell in case we cannot get any reusable cells from the **UITableView**. We then assign the title to the cell's text label and set the cell's imageview to an image representing the task's state.
@@ -524,7 +532,7 @@ This will run the **task:markAsDone:** method for the selected task. Let's imple
                                      @"task":taskDictionary};
     
     // GET Tasks from Server
-    [[AFHTTPRequestOperationManager manager] PUT:[NSString stringWithFormat:@"http://192.168.1.144:3000/v1/tasks/%d.json",task.identifier.intValue]
+    [[AFHTTPRequestOperationManager manager] PUT:[NSString stringWithFormat:@"http://ios-todo.herokuapp.com/v1/tasks/%d.json",task.identifier.intValue]
                                        parameters:jsonDictionary
                                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                               [self taskMarkSuccesfulWithTask:task isDone:done];
