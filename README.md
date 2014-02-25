@@ -4,7 +4,7 @@ This guide assumes that you already have a **MacBook** running at least OSX (**M
 ## Step 0 - Introduction
 iOS is a mobile platform developed by Apple and is one of the most robust mobile platforms.
 iOS development is mostly done on **Xcode** (IDE) and the programming language is Objective-C.
-Objective-C is an **object-oriented programming language** based on C, but quite different from C++ and C#. 
+Objective-C is an **object-oriented programming language** based on C. 
 
 Methods (or messages) have quite a different structure from what you have in C.
 
@@ -231,6 +231,12 @@ Next step is to actually download and install the libraries onto our project, so
 After it is finished you should close your **Xcode** window (Cmd-W), and open the new **Workspace** by running **open Todo.xcworkspace** on the console.
 
 You will now have access to the downloaded libraries by using the **#import** macro in your code (e.g. #import <AFNetworking/AFNetworking.h>).
+
+#### Without cocoapods
+
+Go to the github pages of each framework, **download as zip** or **clone**, and drag the <name of framework> folder into your project.
+
+To import the libraries on your .h/.m files you will have to import with #import "AFNetworking.h" since it is code on your actual project.
 
 #### AFNetworking
 This framework allows very easy intergration with any **RESTful** service API, whislt having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
