@@ -183,7 +183,7 @@ To login we'll need to get the email and password strings from the input textfie
 
 Since our server communicates with a **JSON** protocol (JSON is a lightweight format to transmit data from a server to an application - web, mobile,etc), we will want to send the user information (and any other information) in a previously defined JSON hierarchy.
 
-Yesterday we developed a server in **Ruby on Rails** where an **API** was defined. One of those was a login API, where it receives a JSON object such as:
+Yesterday we developed a server in **Ruby on Rails** where an **API** was defined. One of the created endpoints was for the login interaction, where it receives a JSON object such as:
 
 ```json
 {
@@ -224,7 +224,7 @@ pod "SDWebImage"
 pod "SVProgressHUD"
 ```
 
-Press **Ctrl-c** and write **:wq** to Write-Quit the file. 
+Press **Ctrl-c** (or **Esc**) and write **:wq** to Write-Quit the file. 
 
 Next step is to actually download and install the libraries onto our project, so lets run **pod install** (this might take a few minutes depending on the network).
 
@@ -239,13 +239,13 @@ Go to the github pages of each framework, **download as zip** or **clone**, and 
 To import the libraries on your .h/.m files you will have to import with #import "AFNetworking.h" since it is code on your actual project.
 
 #### AFNetworking
-This framework allows very easy intergration with any **RESTful** service API, whislt having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
+This framework allows very easy intergration with any **RESTful** service API, whilst having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
 
 #### SDWebImage
-This framework is the holy grail of image downloading. It allows with close to no effort the downloading and displaying of images in **UIImageView**s. Automatically managing cache and memory consumption, allowing easy to use animation upon image visualization, etc. (Might not have enough time to go through SDWebImage on this workshop).
+This framework is the holy grail of image downloading. It allows with close to no effort the downloading and displaying of images in **UIImageViews**. Automatically managing cache and memory consumption, allowing easy to use animation upon image visualization, etc. (Might not have enough time to go through SDWebImage on this workshop).
 
 #### SVProgressHUD
-This framework is provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface aswell.
+This framework provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface as well.
 
 ### End of Interlude
 
@@ -330,7 +330,7 @@ Since we need to pass the obtained user token to the new TodoViewController, we'
 }
 ```
 
-Finally, to add a touch of proper User Experience I will also set the chain of **firstResponders** for the textfields, so that you jump between the textfields as if it was a form. (and also performing the form action when there is no next field).
+Finally, if we want to add a touch of proper User Experience we should also set the chain of **firstResponders** for the textfields, so that you jump between the textfields as if it was a form. (and also performing the form action when there is no next field).
 
 ```objc
 // Go to next textfield upon clicking the return key (perform action if no other textfield)
@@ -574,7 +574,7 @@ In the second method, we simply dismiss the **SVProgressHUD** and deselect the r
 
 ## Step 7 - New Task View Controller
 
-The process on the **NewTaskViewController** is very similar to the **LoginViewController** and the **SignupViewController, so I will skip that particular view controller as well.
+The process on the **NewTaskViewController** is very similar to the **LoginViewController** and the **SignupViewController**, so I will skip that particular view controller as well.
 
 ## Prologue
 
