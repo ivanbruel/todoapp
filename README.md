@@ -26,7 +26,7 @@ Most of iOS development is done with the **MVC design pattern** (Model-View Cont
 
 For this workshop we are creating a network-based Todo list app with authentication.
 
-Open up **Xcode**, click **Create a new Project** and select **iOS** and then **Empty Application**.
+Open up **Xcode**, click **Create a new Project** and select **iOS** and then **Single View Application**.
 Set your product name to **Todo** and fill the Organization Name and Company Identifier whichever way pleases you.
 
 Set the Devices to **iPhone** and leave the **Use Core Data** unchecked as we will not be using CoreData today. That would be a workshop on its own.
@@ -38,6 +38,58 @@ You will then land on the **Target**'s General Settings, and under Identity you 
 Under the next two sections you can define which resource shall be used for the **App Icon** and which should be used for the **Splash Screen**.
 
 Last but not least, we have the **Frameworks** section, where you can import which iOS (and external) frameworks your application will use. (If you do not have **cocoapods** installed please click the **+** sign and add **CoreGraphics**, **MobileCoreServices**, **Security** and **SystemConfiguration** frameworks, otherwise the app will not compile when we use the **AFNetworking** framework).
+
+## Step 1.1 - Project Structure
+
+![Project Structure](http://i.imgur.com/vFHX9hg.png)
+
+>Even though this kind of project structure does not come as default, I find that it is a better alternative to organize and structure your code project-wise. (You will have to create the folder structure in Xcode if you want it to look like that).
+
+### Project Root
+
+In the **Project Root** you can configure most of the application's settings, such as, permitted **device orientations**, **app icon**, **splash images**, etc.
+
+### Application Delegate
+
+The **AppDelegate** focuses on allowing the developer to control his application through **lifecycle** callbacks for when the application is launched or when it goes into foreground/background. This class is mostly used to initialize what you might need **globally** throughout the application. 
+
+### Model
+The **Model** is where classes should be created for containing the data which should be handle by the application. In this case the model will only contain **Tasks**.
+
+A Model Class might contain **custom initializers**, **public and private properties** and **public and private methods**.
+
+
+### Storyboard
+![Storyboard](http://i.imgur.com/mMdBIp3.png)
+
+The storyboard is the equivalent of the **View** in the **Model View Controller** design pattern.
+
+In the **storyboard** you can design the **application's workflow** by creating a chain of **View Controllers** that can interact with each other through **segues**. In each view controller on the storyboard you will be able to design the view hierarchy by dragging and dropping views from the bottom right corner of the storyboard screen. These views should later be connected to the **Controller** through the use of **IBActions** and **IBOutlets**.
+
+### View Controllers
+
+The **View controllers** are the equivalent of the **controller** in the **Model View Controller** design pattern.
+
+In each view controller you will be able to control its own **lifecycle**, **interface interaction** and **delegate callbacks**. 
+
+Interface interaction should be controlled through the **IBActions** defined and the **IBOutlets**. IBActions are what happens normally when you **click** something. IBOutlets are variables assigned to views, in order to manipulate the **UI** according to the controller.
+
+The controller might also have access to the **Model**, in order to display information accordingly.
+
+### Assets
+In the **.xcassets** file you will have your image resources for the application's UI. These images **must** always include two versions, a normal and a retina one. (e.g. image.png and image@2x.png).
+
+### External Frameworks
+These three **External Frameworks** are probably the most used in the iOS Developer community.
+#### AFNetworking
+This framework allows very easy intergration with any **RESTful** service API, whislt having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
+
+#### SDWebImage
+This framework is the holy grail of image downloading. It allows with close to no effort the downloading and displaying of images in **UIImageView**s. Automatically managing cache and memory consumption, allowing easy to use animation upon image visualization, etc. (Might not have enough time to go through SDWebImage on this workshop).
+
+#### SVProgressHUD
+This framework is provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface aswell.
+
 
 ## Step 2 - Model
 
@@ -62,11 +114,13 @@ A Task object will need 3 things, an **identifier** (to identify the task on the
 
 **strong** means an object created from the class will keep the property value until it is set to something else or the actual task object is destroyed. (an alternative would be  **weak** where the property might lose value when no other strong pointers are set to the same NSString/NSNumber object).
 
-**readwrite** is differs from **strong/weak** in the sense that it can only be used to primary types such as **BOOL**, **int**, **CGFloat**, etc.
+**readwrite** differs from **strong/weak** in the sense that it can only be used to primary types such as **BOOL**, **int**, **CGFloat**, etc. (you can possibly set as **readonly** as well).
 
 **NSNumber** is a number "super-class", which can handle any kind of numeric or boolean value.
 
 **NSString** is the equivalent of a String object in many other languages.
+
+>Bear in mind that in Objective-C there is a difference between **mutable** and **unmutable** objects, e.g. NSArray and NSMutableArray, where you can add objects to an NSMutableArray object but you cannot add them to an NSArray (Objects must be added on the NSArray initWithObjects: method) 
 
 Since we have 3 properties that will need to be set when a **Task** object is created, let's define a designated initializer.
 
@@ -101,7 +155,31 @@ The only function defined manually on our model shall be the custom initializer,
 So, the Model is set, let's change our focus for a bit.
 
 
+## Step 3 - Storyboard
+Since this is a highly visual and drag-and-drop experience, I will not go through it in this tutorial (although it will be included in the workshop itself). 
 
+The best way for you to work with **Storyboards** is trial and error, so feel free to drag and drop views and view controllers around.
+
+## Step 4 - LoginViewController
+
+To create a new view controller **right click** the **Todo** folder and press **New File...** , select **Objective-C class**, set the **Subclass of** to **UIViewController** and the Class name to **LoginViewController**. Leave both boxes unchecked as we will not need them.
+
+On this controller we want to have a basic login interaction, with an **email** and **password** fields, a **login** button and a **signup** bar button.
+
+Let's create the **IBOutlets** for this controller (**LoginViewController.h**):
+
+```objc
+@property(nonatomic, weak) IBOutlet UITextField* emailTextField;
+@property(nonatomic, weak) IBOutlet UITextField* passwordTextField;
+```
+
+**emailTextField** and **passwordTextField** after being connected to the **Storyboard ViewController** are object representations of the views themselves. 
+
+Since we'll have a **login click event**, we will need a **IBAction** to run code upon button press.
+
+```objc
+-(IBAction)loginClick:(UIButton *)sender;
+```
 
 
 # OLD VERSION
@@ -110,52 +188,6 @@ Clone (or download as zip) the template project from [https://github.com/ivanbru
 
 Open up **Todo.xcodeproj** with **Xcode**.
 
-## Step 2 - Project Structure
-
-![Project Structure](http://i.imgur.com/vFHX9hg.png)
-### Project Root
-
-In the **Project Root** you can configure most of the application's settings, such as, permitted **device orientations**, **app icon**, **splash images**, etc.
-
-### Application Delegate
-
-The **AppDelegate** focuses on allowing the developer to control his application through **lifecycle** callbacks for when the application is launched or when it goes into foreground/background. This class is mostly used to initialize what you might need **globally** throughout the application. 
-
-### Model
-The **Model** is where classes should be created for containing the data which should be handle by the application. In this case the model will only contain **Task**s.
-
-A Model Class might contain **custom initializers**, **public and private properties** and **public and private methods**.
-
-### Storyboard
-![Storyboard](http://i.imgur.com/mMdBIp3.png)
-
-The storyboard is the equivalent of the **View** in the **Model View Controller** design pattern.
-
-In the **storyboard** you can design the **application's workflow** by creating a chain of **View Controllers** that can interact with each other through **segues**. In each view controller on the storyboard you will be able to design the view hierarchy by dragging and dropping views from the bottom right corner of the storyboard screen. These views should later be connected to the **Controller** through the use of **IBActions** and **IBOutlets**.
-
-### View Controllers
-
-The **View controllers** are the equivalent of the **controller** in the **Model View Controller** design pattern.
-
-In each view controller you will be able to control its own **lifecycle**, **interface interaction** and **delegate callbacks**. 
-
-Interface interaction should be controlled through the **IBActions** defined and the **IBOutlets**. IBActions are what happens normally when you **click** something. IBOutlets are variables assigned to views, in order to manipulate the **UI** according to the controller.
-
-The controller might also have access to the **Model**, in order to display information accordingly.
-
-### Assets
-In the **.xcassets** file you will have your image resources for the application's UI. These images **must** always include two versions, a normal and a retina one. (e.g. image.png and image@2x.png).
-
-### External Frameworks
-These three **External Frameworks** are probably the most used in the iOS Developer community.
-#### AFNetworking
-This framework allows very easy intergration with any **RESTful** service API, whislt having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
-
-#### SDWebImage
-This framework is the holy grail of image downloading. It allows with close to no effort the downloading and displaying of images in **UIImageView**s. Automatically managing cache and memory consumption, allowing easy to use animation upon image visualization, etc.
-
-#### SVProgressHUD
-This framework is provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface aswell.
 
 ## Step 3 - Coding
 Now that we know the basic project structure let's get down to the coding. 
@@ -163,7 +195,7 @@ Now that we know the basic project structure let's get down to the coding.
 
 ### Views
 
-Now on to View customization for the app.
+Now on to the View customization for the app.
 Go to your **Storyboard**, and look at your **LoginViewController** blank view.
 
 What you want to do here is drag **Text Fields** (one for the **email** and one for the **password**) from the bottom right corner of your screen and drop them in your **LoginViewController**'s view. 
@@ -173,6 +205,8 @@ You will also want to drag and drop a **button** for the actual **login**.
 Since we also need a **signup** button, lets drag a **Bar Button** from the right corner to right side of the **navigation bar** present on the **LoginViewController**.
 
 Now that we have the **UI** in place. Let's go to the **LoginViewController.h** and create the **IBActions** and the **IBOutlets** for the controller to interact with the views.
+
+>Now go and ask me what IBOutlets and IBActions are :) 
 
 ```objc
 -(IBAction)loginClick:(UIButton *)sender;
@@ -185,7 +219,6 @@ Going back to the **Storyboard** we can now right click each individual view and
 We will also want to set the **Action Segue** of the **Sign up** button to the **Signup View Controller**.
 For the **Login button** we will want to set its **Touch up event** to the **loginClick:** IBAction.
 
-The rest of the **Storyboard** will be filled out similarly to this one for time purposes.
 
 ### Login View Controller
 Let's get down to business, the next few lines of code will show you how to get input from your views, created a JSON object and perform a request to the **ruby on rails** server.
