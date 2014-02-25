@@ -10,9 +10,7 @@
 		3001D0A318BA5CCB0092C46F /* TodoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001D0A218BA5CCB0092C46F /* TodoViewController.m */; };
 		3001D0A718BA5E870092C46F /* NewTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001D0A618BA5E870092C46F /* NewTaskViewController.m */; };
 		3001D0AB18BA67070092C46F /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001D0AA18BA67070092C46F /* Task.m */; };
-		3001D0AD18BA8B4B0092C46F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3001D0AC18BA8B4B0092C46F /* CFNetwork.framework */; };
 		3001D0AF18BA8B760092C46F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3001D0AE18BA8B760092C46F /* SystemConfiguration.framework */; };
-		3001D0B118BA8B980092C46F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3001D0B018BA8B980092C46F /* Security.framework */; };
 		3001D0B318BA8BB60092C46F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3001D0B218BA8BB60092C46F /* MobileCoreServices.framework */; };
 		300ADD0D18BA550F00316013 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD0C18BA550F00316013 /* Foundation.framework */; };
 		300ADD0F18BA550F00316013 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 300ADD0E18BA550F00316013 /* CoreGraphics.framework */; };
@@ -158,9 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3001D0B318BA8BB60092C46F /* MobileCoreServices.framework in Frameworks */,
-				3001D0B118BA8B980092C46F /* Security.framework in Frameworks */,
 				3001D0AF18BA8B760092C46F /* SystemConfiguration.framework in Frameworks */,
-				3001D0AD18BA8B4B0092C46F /* CFNetwork.framework in Frameworks */,
 				300ADD0F18BA550F00316013 /* CoreGraphics.framework in Frameworks */,
 				300ADD1118BA550F00316013 /* UIKit.framework in Frameworks */,
 				300ADD0D18BA550F00316013 /* Foundation.framework in Frameworks */,

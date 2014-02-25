@@ -3,23 +3,108 @@ This guide assumes that you already have a **MacBook** running at least OSX (**M
 
 ## Step 0 - Introduction
 iOS is a mobile platform developed by Apple and is one of the most robust mobile platforms.
-iOS development is mostly done on Xcode (IDE) and the programming language is Objective-C.
-Objective-C is an object-oriented programming language based on C, but quite different from C++ and C#. 
+iOS development is mostly done on **Xcode** (IDE) and the programming language is Objective-C.
+Objective-C is an **object-oriented programming language** based on C, but quite different from C++ and C#. 
 
 Methods (or messages) have quite a different structure from what you have in C.
 
 ```cpp
 obj->method(color,size);
-
 ``` 
 
 ```objc
 [obj methodWithColor:color withSize:size];
 ```
 
+The iOS Framework brings a whole lot more than just the Objective-C language, new Frameworks for controlling the mobile capabilities of your device, but also very popular and powerful OSX frameworks such as CoreData. 
+
+Most of iOS development is done with the **MVC design pattern** (Model-View Controller) in mind, therefore an application will be divided into **Model** which contains the classes that contain the data your app will manipulate; **View** which refers to the visual part of iOS, where you create views to display your data; and **Controller** which is the middle ground between your data and your views, the controller manipulate the data and display it properly on the views, but will also receive input from the views and convert/manipulate into data.
+
+![MVC Model](http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-13-13-metablogapi/7024.espbyhyv_5F00_2.jpg)
+
+## Step 1 - A New Project
+
+For this workshop we are creating a network-based Todo list app with authentication.
+
+Open up **Xcode**, click **Create a new Project** and select **iOS** and then **Empty Application**.
+Set your product name to **Todo** and fill the Organization Name and Company Identifier whichever way pleases you.
+
+Set the Devices to **iPhone** and leave the **Use Core Data** unchecked as we will not be using CoreData today. That would be a workshop on its own.
+
+Select the folder to which you would like to save the project and press **Create**.
+
+You will then land on the **Target**'s General Settings, and under Identity you can define the app version, build number and your development team (for code-signing purposes). The Deployment Info is the section where you can define the iOS version of your application, which devices it will deploy to (iPhone,iPad or both), which orientations the app will support, and the color of the status bar upon launch.
+
+Under the next two sections you can define which resource shall be used for the **App Icon** and which should be used for the **Splash Screen**.
+
+Last but not least, we have the **Frameworks** section, where you can import which iOS (and external) frameworks your application will use. (If you do not have **cocoapods** installed please click the **+** sign and add **CoreGraphics**, **MobileCoreServices**, **Security** and **SystemConfiguration** frameworks, otherwise the app will not compile when we use the **AFNetworking** framework).
+
+## Step 2 - Model
+
+Since this app focuses on tasks, let's model a **Task class** for the app to use.
+Right click your **Todo** folder and click **New File...**, under **iOS** select Objective-C class and click **next**.
+Set the name of the class as **Task** and be sure to subclass **NSObject**, click **next** and then **Create**.
+
+You will now have 2 new files on your project, **Task.h** and **Task.m**. Let's go over to Task.h and start adding properties to our tasks.
+
+A Task object will need 3 things, an **identifier** (to identify the task on the server side), a **title** and a status **isDone** (to let us know if we've done the task or not). Let's add those 3 properties to the **Task.h** file.
+
+```objc
+// Public model properties
+@property(nonatomic, strong) NSNumber* identifier;
+@property(nonatomic, strong) NSString* title;
+@property(nonatomic, readwrite) BOOL isDone;
+```
+
+**@property** creates a new property on the class, automatically creating the setter and getter for said property.
+
+**nonatomic** means you do not want to guarantee thread-safety (which is faster in terms of get/set performance and we do not required thread safety).
+
+**strong** means an object created from the class will keep the property value until it is set to something else or the actual task object is destroyed. (an alternative would be  **weak** where the property might lose value when no other strong pointers are set to the same NSString/NSNumber object).
+
+**readwrite** is differs from **strong/weak** in the sense that it can only be used to primary types such as **BOOL**, **int**, **CGFloat**, etc.
+
+**NSNumber** is a number "super-class", which can handle any kind of numeric or boolean value.
+
+**NSString** is the equivalent of a String object in many other languages.
+
+Since we have 3 properties that will need to be set when a **Task** object is created, let's define a designated initializer.
+
+```objc
+// Custom Initializer
+-(id)initWithIdentifier:(NSNumber*)identifier
+              withTitle:(NSString*)title
+                 isDone:(BOOL)isDone;
+```
+
+As I said before, methods (or messages) are defined and used differently from other languages, it provides a more verbose way to look at code. This method reads as "Task, initialize with an identifier, a title, and a done status".
+
+Now that we have defined the header file, let's go over to the implementation file, **Task.m**.
+
+The only function defined manually on our model shall be the custom initializer, where you create and assign the **self** (equivalent of **this** in JAVA) to the default initializer of **NSObject**, and then we set the self properties to the values passed on the message.
+
+```objc
+-(id)initWithIdentifier:(NSNumber *)identifier 
+              withTitle:(NSString *)title
+                 isDone:(BOOL)isDone{
+                 
+    if ((self = [super init]))
+    {
+        self.identifier = identifier;
+        self.title = title;
+        self.isDone = isDone;
+    }
+    return self;
+}
+```
+
+So, the Model is set, let's change our focus for a bit.
 
 
-## Step 1 - Setup
+
+
+
+# OLD VERSION
 
 Clone (or download as zip) the template project from [https://github.com/ivanbruel/todoapp](https://github.com/ivanbruel/todoapp).
 
@@ -75,39 +160,6 @@ This framework is provides an easy way to display a loader on the screen, and al
 ## Step 3 - Coding
 Now that we know the basic project structure let's get down to the coding. 
 
-### Model
-This application will focus on managing **Tasks** therefore let's create a Task class on the Model folder.
-
-A Task object will need 3 things, an **identifier**, a **title** and a status **isDone**. Let's add those 3 properties to the **Task.h** file.
-
-```objc
-// Public model properties
-@property(nonatomic, strong) NSNumber* identifier;
-@property(nonatomic, strong) NSString* title;
-@property(nonatomic, readwrite) BOOL isDone;
-```
-Now that we have properties, the next step is to create a custom initializer to set those variables on object creation. (on the **Task.h** file aswell)
-
-```objc
-// Custom Initializer
--(id)initWithIdentifier:(NSNumber*)identifier
-              withTitle:(NSString*)title
-              isDone:(BOOL)isDone;
-```
-Now let's go to the **Task.m** file and implement the actual custom initializer.
-
-```objc
--(id)initWithIdentifier:(NSNumber *)identifier withTitle:(NSString *)title isDone:(BOOL)isDone{
-    if ((self = [super init]))
-    {
-        self.identifier = identifier;
-        self.title = title;
-        self.isDone = isDone;
-    }
-    return self;
-}
-```
-The application model is done.
 
 ### Views
 
