@@ -240,13 +240,13 @@ Go to the github pages of each framework, **download as zip** or **clone**, and 
 
 To import the libraries on your .h/.m files you will have to import with #import "AFNetworking.h" since it is code on your actual project.
 
-#### AFNetworking
+#### [AFNetworking](https://github.com/AFNetworking/AFNetworking)
 This framework allows very easy intergration with any **RESTful** service API, whilst having a performance boost versus the Apple networking framework. This framework also has a much easier callback interface (through **blocks**).
 
-#### SDWebImage
+#### [SDWebImage](https://github.com/rs/SDWebImage)
 This framework is the holy grail of image downloading. It allows with close to no effort the downloading and displaying of images in **UIImageViews**. Automatically managing cache and memory consumption, allowing easy to use animation upon image visualization, etc. (Might not have enough time to go through SDWebImage on this workshop).
 
-#### SVProgressHUD
+#### [SVProgressHUD](https://github.com/samvermette/SVProgressHUD)
 This framework provides an easy way to display a loader on the screen, and also error and success messages to the user. With a very easy to use interface as well.
 
 ### End of Interlude
@@ -267,7 +267,7 @@ So lets perform a request to the actual server.
                                        }];
 ```
 
-This will pass the **jsonDictionary** as parameter of the **POST** to the server. It will also perform the **loginSuccessfulWithUserToken:** method with the **token** from the response JSON sent by the server. It might also call **loginFailed** in case the server did not accept our input for email/password.
+This will pass the **jsonDictionary** as parameter of the **POST** to the server. It will also perform the **loginSuccessfulWithUserToken:** method with the **authentication_token** from the response JSON sent by the server. It might also call **loginFailed** in case the server did not accept our input for email/password.
 
 >The ^(AFHTTPRequestOperation *operation, id responseObject) { code } nomenculature represent **Blocks** which are basically functions that can be passed as arguments to other functions (methods), and executed when the receiver choses to.
 
