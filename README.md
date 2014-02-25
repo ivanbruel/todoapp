@@ -111,7 +111,7 @@ A Task object will need 3 things, an **identifier** (to identify the task on the
 
 >Bear in mind that in Objective-C there is a difference between **mutable** and **unmutable** objects, e.g. NSArray and NSMutableArray, where you can add objects to an NSMutableArray object but you cannot add them to an NSArray (Objects must be added on the NSArray initWithObjects: method) 
 
-Since we have 3 properties that will need to be set when a **Task** object is created, let's define a designated initializer.
+Since we have 3 properties that will need to be set when a **Task** object is created, let's define the initializer.
 
 ```objc
 // Custom Initializer
@@ -267,7 +267,7 @@ So lets perform a request to the actual server.
 
 This will pass the **jsonDictionary** as parameter of the **POST** to the server. It will also perform the **loginSuccessfulWithUserToken:** method with the **token** from the response JSON sent by the server. It might also call **loginFailed** in case the server did not accept our input for email/password.
 
->The ^(AFHTTPRequestOperation *operation, id responseObject) { code } nomenculature represent **Blocks** which are basically functions that can be passed as arguments to other functions (methods).
+>The ^(AFHTTPRequestOperation *operation, id responseObject) { code } nomenculature represent **Blocks** which are basically functions that can be passed as arguments to other functions (methods), and executed when the receiver choses to.
 
 To provide a better experience to the user, we should also send notice that we're performing a background task between the app and the server. Let's take advantage of **SVProgressHUD** to display a simple loader with a message.
 
@@ -311,7 +311,7 @@ In order to save the **userToken** we'll need to create a new **Private** proper
 @end
 ```
 
-///////////A PRIVATE PROPERTY DEF
+This is the way you can add **private properties** to your classes in Objective-c. As you can see, this is an interface that is declared in your implementation file with a similar syntax, making it your private interface.
 
 As for what a **Segue** is, it is a way to interact between different **UIViewControllers**, by reusing certain flow between them. A segue has an **identifier** to be able to perform it by code. 
 
@@ -360,7 +360,6 @@ On the **TodoViewController.m** we want to have a private property to keep the M
 @end
 ```
 
-This is the way you can add **private properties** to your classes in Objective-c. As you can see, this is an interface that is declared in your implementation file with a similar syntax, making it your private interface.
 
 
 Next, since the **TodoViewController** is a **UITableViewController** and the data comes from the network, we want to add a **UIRefreshControl** to have a pull to refresh functionality. We also want to initialize the property declared above to avoid **nil** pointers. Let's add the folllowing code to the **viewDidLoad:** method.
@@ -578,6 +577,7 @@ If you want to learn a bit more about Objective-C and iOS development I suggest 
 - Begginers:
 	- [Developing iOS 7 Apps for iPhone and iPad by Stanford @ iTunes University](https://itunes.apple.com/us/course/developing-ios-7-apps-for/id733644550)
 	- [Ray Wenderlich - Tutorials for Developers & Gamers](http://www.raywenderlich.com/)
+	- [Objective-C coding style guide](https://github.com/raywenderlich/objective-c-style-guide)
 - Experienced:
 	- [NSHipster](http://nshipster.com/)
 - Plug-and-Play free-to-use views:
