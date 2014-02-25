@@ -33,7 +33,9 @@ Set the Devices to **iPhone** and leave the **Use Core Data** unchecked as we wi
 
 Select the folder to which you would like to save the project and press **Create**.
 
-You will then land on the **Target**'s General Settings, and under Identity you can define the app version, build number and your development team (for code-signing purposes). The Deployment Info is the section where you can define the iOS version of your application, which devices it will deploy to (iPhone,iPad or both), which orientations the app will support, and the color of the status bar upon launch.
+You will then land on the **Target**'s General Settings, and under Identity you can define the app version, build number and your development team (for code-signing purposes). The Deployment Info is the section where you can define the iOS version of your application, which devices it will deploy to (iPhone,iPad or both), which orientations the app will support, and the color of the status bar upon launch. 
+
+For this app we will only want to use the **Portrait** orientation, please uncheck any other Device Orientations.
 
 Under the next two sections you can define which resource shall be used for the **App Icon** and which should be used for the **Splash Screen**.
 
@@ -259,7 +261,7 @@ So lets perform a request to the actual server.
 [[AFHTTPRequestOperationManager manager] POST:@"http://ios-todo.herokuapp.com/v1/users/sign_in.json"
                                   parameters:jsonDictionary
                                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                       	 [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"token"]];
+                                       	 [self loginSuccessfulWithUserToken:[responseObject objectForKey:@"authentication_token"]];
                                      }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                            [self loginFailed];
                                        }];
