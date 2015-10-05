@@ -583,7 +583,7 @@ Hopefully if this workshop went according to plan you've learned a bit of everyt
 
 If you want to learn a bit more about Objective-C and iOS development I suggest you look into:
 
-- Begginers:
+- Beginners:
 	- [Developing iOS 7 Apps for iPhone and iPad by Stanford @ iTunes University](https://itunes.apple.com/us/course/developing-ios-7-apps-for/id733644550)
 	- [Ray Wenderlich - Tutorials for Developers & Gamers](http://www.raywenderlich.com/)
 	- [Objective-C coding style guide](https://github.com/raywenderlich/objective-c-style-guide)
